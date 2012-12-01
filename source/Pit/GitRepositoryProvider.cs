@@ -6,7 +6,7 @@ using System.Management.Automation.Provider;
 namespace Pit
 {
     [CmdletProvider("Git", ProviderCapabilities.None)]
-    public class GitRepositoryProvider : ItemCmdletProvider
+    public class GitRepositoryProvider : ContainerCmdletProvider
     {
         protected override Collection<PSDriveInfo> InitializeDefaultDrives()
         {
