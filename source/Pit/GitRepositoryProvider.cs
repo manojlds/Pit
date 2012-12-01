@@ -13,7 +13,13 @@ namespace Pit
     [CmdletProvider("Git", ProviderCapabilities.None)]
     public class GitRepositoryProvider : ContainerCmdletProvider
     {
+        private readonly IGitConfigReader gitConfigReader;
         private const string PathSeparator = @"\";
+
+        public GitRepositoryProvider()
+        {
+            gitConfigReader = new GitConfigReader();
+        }
 
         protected override Collection<PSDriveInfo> InitializeDefaultDrives()
         {
@@ -32,7 +38,7 @@ namespace Pit
                 return;
             }
             var repo = path;
-            var trackedRepository = GetTrackedRepositories().FirstOrDefault(repository => repository.Name == path);
+            var trackedRepository = gitConfigReader.GetTrackedRepository(PSDriveInfo, path);
             if (trackedRepository == null)
             {
                 WriteError(new ErrorRecord(
@@ -49,8 +55,8 @@ namespace Pit
         protected override void GetChildItems(string path, bool recurse)
         {
             if (!PathIsDrive(path)) return;
-            
-            foreach (var trackedRepository in GetTrackedRepositories())
+
+            foreach (var trackedRepository in gitConfigReader.GetTrackedRepositories(PSDriveInfo))
             {
                 WriteItemObject(trackedRepository, path, false);
             }
@@ -63,7 +69,7 @@ namespace Pit
                 return true;
             }
 
-            return GetTrackedRepositories().Any(repository => repository.Name == path);
+            return gitConfigReader.IsTracked(PSDriveInfo, path);
         }
 
         protected override bool IsValidPath(string path)
@@ -75,18 +81,6 @@ namespace Pit
         {
             return String.IsNullOrEmpty(path.Replace(PSDriveInfo.Root, string.Empty)) ||
                    String.IsNullOrEmpty(path.Replace(PSDriveInfo.Root + PathSeparator, string.Empty));
-        }
-
-        private IEnumerable<GitRepository> GetTrackedRepositories()
-        {
-            var gitDriveInfo = PSDriveInfo as GitDriveInfo;
-            if (gitDriveInfo == null) return Enumerable.Empty<GitRepository>();
-
-            using (var configFileStream = new StreamReader(gitDriveInfo.GitDriveConfigFile))
-            using(var reader = new CsvReader(configFileStream))
-            {
-                return reader.GetRecords<GitRepository>().ToList();
-            }
         }
     }
 }

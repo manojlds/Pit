@@ -44,7 +44,9 @@
     <Reference Include="System.Management.Automation" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GitDriveConfig\GitConfigReader.cs" />
     <Compile Include="GitDriveConfig\GitRepository.cs" />
+    <Compile Include="GitDriveConfig\IGitConfigReader.cs" />
     <Compile Include="GitDriveInfo.cs" />
     <Compile Include="GitRepositoryProvider.cs" />
     <Compile Include="Pit.cs">
