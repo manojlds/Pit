@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CsvHelper</id>
+    <version>1.12.1</version>
+    <authors>Josh Close</authors>
+    <owners>Josh Close</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit</licenseUrl>
+    <projectUrl>https://github.com/JoshClose/CsvHelper</projectUrl>
+    <iconUrl>https://raw.github.com/JoshClose/CsvHelper/master/logo/Comma-Small.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A library for reading and writing CSV files. Extremely fast, flexible, and easy to use. Supports reading and writing of custom class objects.</description>
+    <releaseNotes>Features:
+Bug Fixes:
+-Fixed issue where an exception was being thrown when reading all the records multiple times.</releaseNotes>
+    <tags>csv csvhelper comma separated value delimited</tags>
+  </metadata>
+</package>

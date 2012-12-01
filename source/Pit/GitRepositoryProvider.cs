@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Management.Automation;
 using System.Management.Automation.Provider;
+using CsvHelper;
+using Pit.GitDriveConfig;
 
 namespace Pit
 {
@@ -20,11 +25,25 @@ namespace Pit
 
         protected override void GetItem(string path)
         {
+            WriteDebug(path);
             if (PathIsDrive(path))
             {
                 WriteItemObject(PSDriveInfo, path, true);
                 return;
             }
+            var repo = path;
+            var trackedRepository = GetTrackedRepositories().FirstOrDefault(repository => repository.Name == path);
+            if (trackedRepository == null)
+            {
+                WriteError(new ErrorRecord(
+                                   new RepositoryNotFoundException(repo),
+                                   "RepoNotTracked",
+                                   ErrorCategory.ObjectNotFound,
+                                   null));
+            }
+
+            WriteItemObject(trackedRepository, path, false
+                );
         }
 
         protected override bool ItemExists(string path)
@@ -34,7 +53,7 @@ namespace Pit
                 return true;
             }
 
-            return false;
+            return true;
         }
 
         protected override bool IsValidPath(string path)
@@ -46,6 +65,12 @@ namespace Pit
         {
             return String.IsNullOrEmpty(path.Replace(PSDriveInfo.Root, string.Empty)) ||
                    String.IsNullOrEmpty(path.Replace(PSDriveInfo.Root + PathSeparator, string.Empty));
+        }
+
+        private IEnumerable<GitRepository> GetTrackedRepositories()
+        {
+            var gitDriveInfo = PSDriveInfo as GitDriveInfo;
+            return new CsvReader(new StreamReader(gitDriveInfo.GitDriveConfigFile)).GetRecords<GitRepository>();
         }
     }
 }
