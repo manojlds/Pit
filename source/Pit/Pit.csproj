@@ -51,7 +51,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryNotFoundException.cs" />
+    <Compile Include="RepositoryNotTrackedException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

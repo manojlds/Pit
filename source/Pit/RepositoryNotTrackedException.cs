@@ -2,10 +2,10 @@
 
 namespace Pit
 {
-    public class RepositoryNotFoundException : Exception
+    public class RepositoryNotTrackedException : Exception
     {
 
-        public RepositoryNotFoundException(string repo) : base (GetMessage(repo))
+        public RepositoryNotTrackedException(string repo) : base (GetMessage(repo))
         {
         }
 

@@ -36,13 +36,24 @@ namespace Pit
             if (trackedRepository == null)
             {
                 WriteError(new ErrorRecord(
-                                   new RepositoryNotFoundException(repo),
-                                   "RepoNotTracked",
+                                   new RepositoryNotTrackedException(repo),
+                                   "RepositoryNotTracked",
                                    ErrorCategory.ObjectNotFound,
                                    null));
+                return;
             }
 
             WriteItemObject(trackedRepository, path, false);
+        }
+
+        protected override void GetChildItems(string path, bool recurse)
+        {
+            if (!PathIsDrive(path)) return;
+            
+            foreach (var trackedRepository in GetTrackedRepositories())
+            {
+                WriteItemObject(trackedRepository, path, false);
+            }
         }
 
         protected override bool ItemExists(string path)
@@ -71,7 +82,11 @@ namespace Pit
             var gitDriveInfo = PSDriveInfo as GitDriveInfo;
             if (gitDriveInfo == null) return Enumerable.Empty<GitRepository>();
 
-            return new CsvReader(new StreamReader(gitDriveInfo.GitDriveConfigFile)).GetRecords<GitRepository>();
+            using (var configFileStream = new StreamReader(gitDriveInfo.GitDriveConfigFile))
+            using(var reader = new CsvReader(configFileStream))
+            {
+                return reader.GetRecords<GitRepository>().ToList();
+            }
         }
     }
 }
