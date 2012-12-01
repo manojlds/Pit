@@ -79,7 +79,7 @@ namespace Pit
 
         protected override bool IsValidPath(string path)
         {
-            throw new NotImplementedException();
+            return !path.Contains(PathSeparator);
         }
 
         private bool PathIsDrive(string path)
