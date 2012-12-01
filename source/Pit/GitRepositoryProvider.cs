@@ -43,7 +43,7 @@ namespace Pit
                 return;
             }
 
-            WriteItemObject(trackedRepository, repo, false);
+            WriteItemObject(trackedRepository, repo, true);
         }
 
         protected override void GetChildItems(string path, bool recurse)
@@ -52,7 +52,18 @@ namespace Pit
 
             foreach (var trackedRepository in gitConfigReader.GetTrackedRepositories())
             {
-                WriteItemObject(trackedRepository, path, false);
+                WriteItemObject(trackedRepository, path, true);
+            }
+        }
+
+        protected override void GetChildNames(string path, ReturnContainers returnContainers)
+        {
+            if (PathIsDrive(path))
+            {
+                foreach (var trackedRepository in gitConfigReader.GetTrackedRepositories())
+                {
+                    WriteItemObject(trackedRepository.Name, path, true);
+                }
             }
         }
 
