@@ -42,8 +42,7 @@ namespace Pit
                                    null));
             }
 
-            WriteItemObject(trackedRepository, path, false
-                );
+            WriteItemObject(trackedRepository, path, false);
         }
 
         protected override bool ItemExists(string path)
@@ -53,7 +52,7 @@ namespace Pit
                 return true;
             }
 
-            return true;
+            return GetTrackedRepositories().Any(repository => repository.Name == path);
         }
 
         protected override bool IsValidPath(string path)
@@ -70,6 +69,8 @@ namespace Pit
         private IEnumerable<GitRepository> GetTrackedRepositories()
         {
             var gitDriveInfo = PSDriveInfo as GitDriveInfo;
+            if (gitDriveInfo == null) return Enumerable.Empty<GitRepository>();
+
             return new CsvReader(new StreamReader(gitDriveInfo.GitDriveConfigFile)).GetRecords<GitRepository>();
         }
     }
