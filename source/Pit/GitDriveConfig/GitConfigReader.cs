@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
@@ -8,26 +9,33 @@ namespace Pit.GitDriveConfig
 {
     class GitConfigReader : IGitConfigReader
     {
-        public IEnumerable<GitRepository> GetTrackedRepositories(PSDriveInfo psDriveInfo)
-        {
-            var gitDriveInfo = psDriveInfo as GitDriveInfo;
-            if (gitDriveInfo == null) return Enumerable.Empty<GitRepository>();
+        private const string GitDriveConfigFileName = ".gitdrive";
 
-            using (var configFileStream = new StreamReader(gitDriveInfo.GitDriveConfigFile))
+        protected string GitDriveConfigFilePath { get; set; }
+
+        public GitConfigReader()
+        {
+            GitDriveConfigFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                                              GitDriveConfigFileName);
+        }
+
+        public IEnumerable<GitRepository> GetTrackedRepositories()
+        {
+            using (var configFileStream = new StreamReader(GitDriveConfigFilePath))
             using (var reader = new CsvReader(configFileStream))
             {
                 return reader.GetRecords<GitRepository>().ToList();
             }
         }
 
-        public GitRepository GetTrackedRepository(PSDriveInfo psDriveInfo, string path)
+        public GitRepository GetTrackedRepository(string path)
         {
-            return GetTrackedRepositories(psDriveInfo).FirstOrDefault(repository => repository.Name == path);
+            return GetTrackedRepositories().FirstOrDefault(repository => repository.Name == path);
         }
 
-        public bool IsTracked(PSDriveInfo psDriveInfo, string path)
+        public bool IsTracked(string path)
         {
-            return GetTrackedRepository(psDriveInfo, path) != null;
+            return GetTrackedRepository(path) != null;
         }
     }
 }

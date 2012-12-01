@@ -38,7 +38,7 @@ namespace Pit
                 return;
             }
             var repo = path;
-            var trackedRepository = gitConfigReader.GetTrackedRepository(PSDriveInfo, path);
+            var trackedRepository = gitConfigReader.GetTrackedRepository(path);
             if (trackedRepository == null)
             {
                 WriteError(new ErrorRecord(
@@ -56,7 +56,7 @@ namespace Pit
         {
             if (!PathIsDrive(path)) return;
 
-            foreach (var trackedRepository in gitConfigReader.GetTrackedRepositories(PSDriveInfo))
+            foreach (var trackedRepository in gitConfigReader.GetTrackedRepositories())
             {
                 WriteItemObject(trackedRepository, path, false);
             }
@@ -69,7 +69,7 @@ namespace Pit
                 return true;
             }
 
-            return gitConfigReader.IsTracked(PSDriveInfo, path);
+            return gitConfigReader.IsTracked(path);
         }
 
         protected override bool IsValidPath(string path)
