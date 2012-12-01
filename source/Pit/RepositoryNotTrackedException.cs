@@ -4,7 +4,6 @@ namespace Pit
 {
     public class RepositoryNotTrackedException : Exception
     {
-
         public RepositoryNotTrackedException(string repo) : base (GetMessage(repo))
         {
         }

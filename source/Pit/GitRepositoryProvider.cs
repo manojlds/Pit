@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Management.Automation;
 using System.Management.Automation.Provider;
-using CsvHelper;
 using Pit.GitDriveConfig;
 
 namespace Pit
@@ -29,16 +25,14 @@ namespace Pit
                        };
         }
 
-        protected override void GetItem(string path)
+        protected override void GetItem(string repo)
         {
-            WriteDebug(path);
-            if (PathIsDrive(path))
+            if (PathIsDrive(repo))
             {
-                WriteItemObject(PSDriveInfo, path, true);
+                WriteItemObject(PSDriveInfo, repo, true);
                 return;
             }
-            var repo = path;
-            var trackedRepository = gitConfigReader.GetTrackedRepository(path);
+            var trackedRepository = gitConfigReader.GetTrackedRepository(repo);
             if (trackedRepository == null)
             {
                 WriteError(new ErrorRecord(
@@ -49,7 +43,7 @@ namespace Pit
                 return;
             }
 
-            WriteItemObject(trackedRepository, path, false);
+            WriteItemObject(trackedRepository, repo, false);
         }
 
         protected override void GetChildItems(string path, bool recurse)
