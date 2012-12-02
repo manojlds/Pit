@@ -2,10 +2,11 @@
 
 namespace Pit.GitDriveConfig
 {
-    internal interface IGitConfigReader
+    internal interface IGitConfigManager
     {
         IEnumerable<GitRepository> GetTrackedRepositories();
         GitRepository GetTrackedRepository(string path);
         bool IsTracked(string path);
+        void TryCreateConfigFile();
     }
 }

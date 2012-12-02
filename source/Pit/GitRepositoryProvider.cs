@@ -9,20 +9,33 @@ namespace Pit
     [CmdletProvider("Git", ProviderCapabilities.None)]
     public class GitRepositoryProvider : ContainerCmdletProvider
     {
-        private readonly IGitConfigReader gitConfigReader;
+        private readonly IGitConfigManager gitConfigManager;
         private const string PathSeparator = @"\";
 
         public GitRepositoryProvider()
         {
-            gitConfigReader = new GitConfigReader();
+            gitConfigManager = new GitConfigManager();
+        }
+
+        protected override ProviderInfo Start(ProviderInfo providerInfo)
+        {
+            gitConfigManager.TryCreateConfigFile();
+            return ProviderInfo;
         }
 
         protected override Collection<PSDriveInfo> InitializeDefaultDrives()
         {
             return new Collection<PSDriveInfo>
                        {
-                           new GitDriveInfo("Git", ProviderInfo, "git:", "Git Provider", null, true)
+                           new GitDriveInfo("git", ProviderInfo, "git:", "Git Provider", null, true)
                        };
+        }
+
+        protected override bool HasChildItems(string path)
+        {
+            if (PathIsDrive(path)) return true;
+
+            return gitConfigManager.IsTracked(path);
         }
 
         protected override void GetItem(string repo)
@@ -32,7 +45,7 @@ namespace Pit
                 WriteItemObject(PSDriveInfo, repo, true);
                 return;
             }
-            var trackedRepository = gitConfigReader.GetTrackedRepository(repo);
+            var trackedRepository = gitConfigManager.GetTrackedRepository(repo);
             if (trackedRepository == null)
             {
                 WriteError(new ErrorRecord(
@@ -48,22 +61,36 @@ namespace Pit
 
         protected override void GetChildItems(string path, bool recurse)
         {
-            if (!PathIsDrive(path)) return;
-
-            foreach (var trackedRepository in gitConfigReader.GetTrackedRepositories())
+            if (PathIsDrive(path))
             {
-                WriteItemObject(trackedRepository, path, true);
+                foreach (var repository in gitConfigManager.GetTrackedRepositories())
+                {
+                    WriteItemObject(repository, path, true);
+                }
+                return;
             }
+            var trackedRepository = gitConfigManager.GetTrackedRepository(path);
+            if (trackedRepository != null)
+            {
+                WriteItemObject("Git repo", path, false);
+            }
+            
         }
 
         protected override void GetChildNames(string path, ReturnContainers returnContainers)
         {
             if (PathIsDrive(path))
             {
-                foreach (var trackedRepository in gitConfigReader.GetTrackedRepositories())
+                foreach (var repository in gitConfigManager.GetTrackedRepositories())
                 {
-                    WriteItemObject(trackedRepository.Name, path, true);
+                    WriteItemObject(repository.Name, path, true);
                 }
+                return;
+            }
+            var trackedRepository = gitConfigManager.GetTrackedRepository(path);
+            if (trackedRepository !=null)
+            {
+                WriteItemObject("Git repo", path, false);
             }
         }
 
@@ -74,7 +101,7 @@ namespace Pit
                 return true;
             }
 
-            return gitConfigReader.IsTracked(path);
+            return gitConfigManager.IsTracked(path);
         }
 
         protected override bool IsValidPath(string path)
@@ -84,8 +111,7 @@ namespace Pit
 
         private bool PathIsDrive(string path)
         {
-            return String.IsNullOrEmpty(path.Replace(PSDriveInfo.Root, string.Empty)) ||
-                   String.IsNullOrEmpty(path.Replace(PSDriveInfo.Root + PathSeparator, string.Empty));
+            return String.IsNullOrEmpty(path);
         }
     }
 }
