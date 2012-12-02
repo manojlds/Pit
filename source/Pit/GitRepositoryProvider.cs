@@ -10,6 +10,7 @@ namespace Pit
     public class GitRepositoryProvider : ContainerCmdletProvider
     {
         private readonly IGitConfigManager gitConfigManager;
+        private NewItemParamters newItemParameters;
         private const string PathSeparator = @"\";
 
         public GitRepositoryProvider()
@@ -21,6 +22,16 @@ namespace Pit
         {
             gitConfigManager.TryCreateConfigFile();
             return ProviderInfo;
+        }
+
+        protected override void NewItem(string path, string itemTypeName, object newItemValue)
+        {
+            WriteDebug(newItemParameters.RepoPath);
+        }
+
+        protected override object NewItemDynamicParameters(string path, string itemTypeName, object newItemValue)
+        {
+            return newItemParameters = newItemParameters ?? new NewItemParamters();
         }
 
         protected override Collection<PSDriveInfo> InitializeDefaultDrives()

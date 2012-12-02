@@ -39,9 +39,12 @@ namespace Pit.GitDriveConfig
 
         public void TryCreateConfigFile()
         {
-            if (!File.Exists(GitDriveConfigFilePath))
+            using(var streamWriter = new StreamWriter(GitDriveConfigFilePath))
+            using (var csv = new CsvWriter(streamWriter))
             {
-                File.Create(GitDriveConfigFilePath);
+                csv.WriteField("Name");
+                csv.WriteField("Path");
+                csv.NextRecord();
             }
         }
     }
