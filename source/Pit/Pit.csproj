@@ -49,7 +49,7 @@
     <Compile Include="GitDriveConfig\IGitConfigManager.cs" />
     <Compile Include="GitDriveInfo.cs" />
     <Compile Include="GitRepositoryProvider.cs" />
-    <Compile Include="NewItemParamters.cs" />
+    <Compile Include="NewItemParameters.cs" />
     <Compile Include="Pit.cs">
       <SubType>Component</SubType>
     </Compile>

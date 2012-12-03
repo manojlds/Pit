@@ -10,7 +10,6 @@ namespace Pit
     public class GitRepositoryProvider : ContainerCmdletProvider
     {
         private readonly IGitConfigManager gitConfigManager;
-        private NewItemParamters newItemParameters;
         private const string PathSeparator = @"\";
 
         public GitRepositoryProvider()
@@ -49,12 +48,14 @@ namespace Pit
 
         protected override void NewItem(string path, string itemTypeName, object newItemValue)
         {
-            WriteDebug(newItemParameters.RepoPath);
+            var newItemParameters = this.DynamicParameters as NewItemParameters;
+
+            
         }
 
         protected override object NewItemDynamicParameters(string path, string itemTypeName, object newItemValue)
         {
-            return newItemParameters = newItemParameters ?? new NewItemParamters();
+            return new NewItemParameters();
         }
 
         protected override void GetChildItems(string path, bool recurse)
