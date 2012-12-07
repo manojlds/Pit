@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="cmd, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\cmd.0.1.0\lib\net40\cmd.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.1.12.1\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
@@ -48,10 +52,10 @@
     <Compile Include="GitDriveConfig\GitConfigManager.cs" />
     <Compile Include="GitDriveConfig\GitRepository.cs" />
     <Compile Include="GitDriveConfig\IGitConfigManager.cs" />
-    <Compile Include="GitDriveInfo.cs" />
     <Compile Include="GitHelper\GitRepositoryManager.cs" />
-    <Compile Include="GitRepositoryProvider.cs" />
-    <Compile Include="NewItemParameters.cs" />
+    <Compile Include="GitRepositoryProvider\GitDriveInfo.cs" />
+    <Compile Include="GitRepositoryProvider\GitRepositoryProvider.cs" />
+    <Compile Include="GitRepositoryProvider\NewItemParameters.cs" />
     <Compile Include="Pit.cs">
       <SubType>Component</SubType>
     </Compile>

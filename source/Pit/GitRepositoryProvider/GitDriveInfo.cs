@@ -1,6 +1,6 @@
-﻿using System.Management.Automation;
+using System.Management.Automation;
 
-namespace Pit
+namespace Pit.GitRepositoryProvider
 {
     internal class GitDriveInfo : PSDriveInfo
     {

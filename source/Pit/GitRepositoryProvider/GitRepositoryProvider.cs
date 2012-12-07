@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Provider;
 using Pit.Exceptions;
 using Pit.GitDriveConfig;
 
-namespace Pit
+namespace Pit.GitRepositoryProvider
 {
     [CmdletProvider("Git", ProviderCapabilities.None)]
     public class GitRepositoryProvider : ContainerCmdletProvider

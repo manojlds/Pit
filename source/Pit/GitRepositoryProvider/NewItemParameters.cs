@@ -1,13 +1,13 @@
-﻿using System.Management.Automation;
+using System.Management.Automation;
 
-namespace Pit
+namespace Pit.GitRepositoryProvider
 {
     public class NewItemParameters
     {
         [Parameter(Mandatory = true)]
         public string RepoPath { get; set; }
 
-        [Parameter]
+        [Parameter(Mandatory = false)]
         public SwitchParameter New { get; set; }
     }
 

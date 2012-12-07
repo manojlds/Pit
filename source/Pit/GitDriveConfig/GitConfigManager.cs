@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Management.Automation;
 using CsvHelper;
-using Pit.Exceptions;
 using Pit.GitHelper;
 
 namespace Pit.GitDriveConfig
@@ -30,9 +28,15 @@ namespace Pit.GitDriveConfig
             }
         }
 
-        public GitRepository GetTrackedRepository(string path)
+        public GitRepository GetTrackedRepository(string name)
         {
-            return GetTrackedRepositories().FirstOrDefault(repository => repository.Name == path);
+            var trackedRepositories = GetTrackedRepositories();
+            return GetTrackedRepository(name, trackedRepositories);
+        }
+
+        private static GitRepository GetTrackedRepository(string name, IEnumerable<GitRepository> trackedRepositories)
+        {
+            return trackedRepositories.FirstOrDefault(repository => repository.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public bool IsTracked(string path)
@@ -55,25 +59,34 @@ namespace Pit.GitDriveConfig
 
         public void TrackRepo(string name, string path, bool isNewRepository = false)
         {
-            GitRepositoryManager.CheckIsValidGitPath(path);
+            if (isNewRepository)
+            {
+                GitRepositoryManager.CreateRepo(path);
+            }
+            else
+            {
+                GitRepositoryManager.CheckIsValidGitPath(path);
+            }
 
+            AddRepo(name, path);
+        }
+
+        private void AddRepo(string name, string path)
+        {
             var trackedRepositories = GetTrackedRepositories().ToList();
-            var trackedRepository = trackedRepositories.FirstOrDefault(repository =>
-                repository.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            var trackedRepository = GetTrackedRepository(name, trackedRepositories);
 
             if (trackedRepository != null)
             {
                 trackedRepository.Path = path;
-            } 
+            }
             else
             {
-                trackedRepositories.Add(new GitRepository{Name = name, Path = path});
+                trackedRepositories.Add(new GitRepository {Name = name, Path = path});
             }
 
             WriteConfig(trackedRepositories);
         }
-
-        
 
         private void WriteConfig(IEnumerable<GitRepository> trackedRepositories)
         {
