@@ -9,18 +9,18 @@ You can get it through PsGet.
 If not installed, install PsGet
 
 ```powershell
-    (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
+(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
 ```
 
 Then, install the Pit module:
 
 ```powershell
-    Install-Module Pit
+Install-Module Pit
 ```
 or
 
 ```powershell
-    Install-Module -ModuleUrl https://github.com/downloads/manojlds/Pit/Pit.zip
+Install-Module -ModuleUrl https://github.com/downloads/manojlds/Pit/Pit.zip
 ```
 
 If you want it added to the profile, add the `-Startup` flag.
