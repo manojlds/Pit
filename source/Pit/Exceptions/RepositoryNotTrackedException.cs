@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pit
+namespace Pit.Exceptions
 {
     public class RepositoryNotTrackedException : Exception
     {

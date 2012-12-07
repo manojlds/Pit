@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using CsvHelper;
+using Pit.Exceptions;
+using Pit.GitHelper;
 
 namespace Pit.GitDriveConfig
 {
@@ -47,6 +50,37 @@ namespace Pit.GitDriveConfig
                 csv.WriteField("Name");
                 csv.WriteField("Path");
                 csv.NextRecord();
+            }
+        }
+
+        public void TrackRepo(string name, string path, bool isNewRepository = false)
+        {
+            GitRepositoryManager.CheckIsValidGitPath(path);
+
+            var trackedRepositories = GetTrackedRepositories().ToList();
+            var trackedRepository = trackedRepositories.FirstOrDefault(repository =>
+                repository.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+
+            if (trackedRepository != null)
+            {
+                trackedRepository.Path = path;
+            } 
+            else
+            {
+                trackedRepositories.Add(new GitRepository{Name = name, Path = path});
+            }
+
+            WriteConfig(trackedRepositories);
+        }
+
+        
+
+        private void WriteConfig(IEnumerable<GitRepository> trackedRepositories)
+        {
+            using (var streamWriter = new StreamWriter(GitDriveConfigFilePath))
+            using (var csv = new CsvWriter(streamWriter))
+            {
+                csv.WriteRecords(trackedRepositories);
             }
         }
     }

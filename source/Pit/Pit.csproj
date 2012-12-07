@@ -44,17 +44,19 @@
     <Reference Include="System.Management.Automation" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\NotAGitRepositoryException.cs" />
     <Compile Include="GitDriveConfig\GitConfigManager.cs" />
     <Compile Include="GitDriveConfig\GitRepository.cs" />
     <Compile Include="GitDriveConfig\IGitConfigManager.cs" />
     <Compile Include="GitDriveInfo.cs" />
+    <Compile Include="GitHelper\GitRepositoryManager.cs" />
     <Compile Include="GitRepositoryProvider.cs" />
     <Compile Include="NewItemParameters.cs" />
     <Compile Include="Pit.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryNotTrackedException.cs" />
+    <Compile Include="Exceptions\RepositoryNotTrackedException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Provider;
+using Pit.Exceptions;
 using Pit.GitDriveConfig;
 
 namespace Pit
@@ -48,9 +49,14 @@ namespace Pit
 
         protected override void NewItem(string path, string itemTypeName, object newItemValue)
         {
-            var newItemParameters = this.DynamicParameters as NewItemParameters;
+            var newItemParameters = DynamicParameters as NewItemParameters;
 
-            
+            if (newItemParameters == null || newItemParameters.RepoPath == null)
+            {
+                throw new ArgumentException("Expected RepoPath to be specified");
+            }
+
+            gitConfigManager.TrackRepo(path, newItemParameters.RepoPath, newItemParameters.New);
         }
 
         protected override object NewItemDynamicParameters(string path, string itemTypeName, object newItemValue)

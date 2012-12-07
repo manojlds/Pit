@@ -6,5 +6,9 @@ namespace Pit
     {
         [Parameter(Mandatory = true)]
         public string RepoPath { get; set; }
+
+        [Parameter]
+        public SwitchParameter New { get; set; }
     }
+
 }
