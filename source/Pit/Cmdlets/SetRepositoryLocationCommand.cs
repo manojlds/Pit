@@ -2,7 +2,7 @@
 using Pit.Exceptions;
 using Pit.GitDriveConfig;
 
-namespace Pit
+namespace Pit.Cmdlets
 {
     [Cmdlet(VerbsCommon.Set, "RepoLocation")]
     public class SetRepositoryLocationCommand : PSCmdlet
@@ -14,7 +14,7 @@ namespace Pit
             gitConfigManager = new GitConfigManager();
         }
 
-        [Parameter(Mandatory = true)]
+        [Parameter(Mandatory = true, Position = 0)]
         public string Name { get; set; }
 
         protected override void ProcessRecord()
