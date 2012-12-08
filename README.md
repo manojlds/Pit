@@ -45,4 +45,11 @@ To switch to the filesystem path of a tracked repo, use the `Set-RepoLocation` c
 pcd -Name NewRepo
 ```
 
-The above will cd to `C:\projects\oss\NewRepo`
+The above will cd to `C:\projects\oss\NewRepo`.
+
+You can use `Get-Content` to read the README.md of a project
+
+```powershell
+Get-Content git:\pit
+gc git:\pit
+```
