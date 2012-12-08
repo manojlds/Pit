@@ -8,7 +8,7 @@ using Pit.GitDriveConfig;
 namespace Pit.GitRepositoryProvider
 {
     [CmdletProvider("Git", ProviderCapabilities.None)]
-    public class GitRepositoryProvider : ContainerCmdletProvider
+    public class GitRepositoryProvider : ContainerCmdletProvider, IContentCmdletProvider
     {
         private readonly IGitConfigManager gitConfigManager;
         private const string PathSeparator = @"\";
@@ -63,6 +63,8 @@ namespace Pit.GitRepositoryProvider
         {
             return new NewItemParameters();
         }
+
+
 
         protected override void GetChildItems(string path, bool recurse)
         {
@@ -130,6 +132,39 @@ namespace Pit.GitRepositoryProvider
         private static bool PathIsDrive(string path)
         {
             return String.IsNullOrEmpty(path);
+        }
+
+        public IContentReader GetContentReader(string path)
+        {
+            if (PathIsDrive(path)) return null;
+            var trackedRepository = gitConfigManager.GetTrackedRepository(path);
+
+            return trackedRepository != null ? new ReadmeContentReader(trackedRepository.Path) : null;
+        }
+
+        public object GetContentReaderDynamicParameters(string path)
+        {
+            return null;
+        }
+
+        public IContentWriter GetContentWriter(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetContentWriterDynamicParameters(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearContent(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object ClearContentDynamicParameters(string path)
+        {
+            throw new NotImplementedException();
         }
     }
 }

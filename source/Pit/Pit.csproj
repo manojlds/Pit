@@ -57,6 +57,7 @@
     <Compile Include="GitRepositoryProvider\GitDriveInfo.cs" />
     <Compile Include="GitRepositoryProvider\GitRepositoryProvider.cs" />
     <Compile Include="GitRepositoryProvider\NewItemParameters.cs" />
+    <Compile Include="GitRepositoryProvider\ReadmeContentReader.cs" />
     <Compile Include="Pit.cs">
       <SubType>Component</SubType>
     </Compile>
