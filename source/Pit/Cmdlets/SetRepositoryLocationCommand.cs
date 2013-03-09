@@ -5,21 +5,11 @@ using Pit.GitDriveConfig;
 namespace Pit.Cmdlets
 {
     [Cmdlet(VerbsCommon.Set, "RepoLocation")]
-    public class SetRepositoryLocationCommand : PSCmdlet
+    public class SetRepositoryLocationCommand : PitCmdlet
     {
-        private readonly IGitConfigManager gitConfigManager;
-
-        public SetRepositoryLocationCommand()
-        {
-            gitConfigManager = new GitConfigManager();
-        }
-
-        [Parameter(Mandatory = true, Position = 0)]
-        public string Name { get; set; }
-
         protected override void ProcessRecord()
         {
-            var trackedRepository = gitConfigManager.GetTrackedRepository(Name);
+            var trackedRepository = GitConfigManager.GetTrackedRepository(Name);
             if (trackedRepository == null) throw new RepositoryNotTrackedException(Name);
 
             SessionState.Path.SetLocation(trackedRepository.Path);

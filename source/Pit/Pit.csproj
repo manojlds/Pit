@@ -52,7 +52,9 @@
     <Reference Include="Microsoft.PowerShell.Commands.Management" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cmdlets\GetLogCommand.cs" />
     <Compile Include="Cmdlets\GetStatusCommand.cs" />
+    <Compile Include="Cmdlets\PitCmdlet.cs" />
     <Compile Include="Exceptions\NotAGitRepositoryException.cs" />
     <Compile Include="GitDriveConfig\GitConfigManager.cs" />
     <Compile Include="GitDriveConfig\GitRepository.cs" />

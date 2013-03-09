@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using LibGit2Sharp;
 using Pit.Exceptions;
 using cmd;
@@ -37,6 +40,14 @@ namespace Pit.GitHelper
             using (var repo = new Repository(path))
             {
                 return repo.Index.RetrieveStatus();
+            }
+        }
+
+        public static IEnumerable<Commit> Log(string path, int number)
+        {
+            using (var repo = new Repository(path))
+            {
+                return repo.Commits.Take(number).ToList();
             }
         }
     }
