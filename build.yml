@@ -1,0 +1,5 @@
+copyContents:
+    "$buildPath/*": "$buildPath/nuget/tools"
+
+nugetSpecs:     [pit.nuspec]
+nugetBasePath:  "$buildPath/nuget"

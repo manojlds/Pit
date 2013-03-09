@@ -1,0 +1,9 @@
+conventions:
+    artifactsDir: "$rootDir/build"
+
+install:
+    pit: 
+        tasks: ["NugetPublish"]
+        config:
+            packages: ["pit.*.nupkg"]
+            source: "NuGet official package source"

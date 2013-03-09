@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Pit</id>
+    <version>0.1.0</version>
+    <authors>manojlds</authors>
+    <owners>manojlds</owners>
+    <licenseUrl>https://github.com/manojlds/Pit</licenseUrl>
+    <projectUrl>http://www.stacktoheap.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A git provider for Powershell that helps you to manage and query git repositories in a machine.</description>
+    <tags>pit git powershell libgit2 libgit2sharp</tags>
+  </metadata>
+</package>
