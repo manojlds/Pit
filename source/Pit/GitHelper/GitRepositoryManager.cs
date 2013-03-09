@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using LibGit2Sharp;
 using Pit.Exceptions;
 using cmd;
 
@@ -24,6 +25,19 @@ namespace Pit.GitHelper
 
             dynamic cmd = new Cmd();
             cmd.git.init(path)();
+        }
+
+        public static RepositoryStatus Status(string path)
+        {
+            if (!Directory.Exists(path) || !Directory.Exists(Path.Combine(path, ".git")))
+            {
+                throw new ArgumentException("Not a git repo");
+            }
+
+            using (var repo = new Repository(path))
+            {
+                return repo.Index.RetrieveStatus();
+            }
         }
     }
 }
