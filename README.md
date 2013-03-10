@@ -39,3 +39,5 @@ You can use `Get-Content` to read the README.md of a project
 Get-Content git:\pit
 gc git:\pit
 ```
+
+You can use `Get-GitStatus` and `Get-GitLog` cmdlets to query the status and log of your repositories respectively.
