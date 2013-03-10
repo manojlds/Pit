@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using LibGit2Sharp;
@@ -32,10 +31,7 @@ namespace Pit.GitHelper
 
         public static RepositoryStatus Status(string path)
         {
-            if (!Directory.Exists(path) || !Directory.Exists(Path.Combine(path, ".git")))
-            {
-                throw new ArgumentException("Not a git repo");
-            }
+            CheckIsValidGitPath(path);
 
             using (var repo = new Repository(path))
             {
@@ -43,11 +39,19 @@ namespace Pit.GitHelper
             }
         }
 
-        public static IEnumerable<Commit> Log(string path, int number)
+        public static IList<PitCommit> Log(string path, int number)
         {
+            CheckIsValidGitPath(path);
+
             using (var repo = new Repository(path))
             {
-                return repo.Commits.Take(number).ToList();
+                return repo.Commits.Take(number).Select(commit => new PitCommit
+                                         {
+                                             Sha = commit.Sha,
+                                             Message = commit.Message,
+                                             Author = commit.Author,
+                                             Committer = commit.Committer,
+                                         }).ToList();
             }
         }
     }

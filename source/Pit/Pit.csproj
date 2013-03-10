@@ -59,6 +59,7 @@
     <Compile Include="GitDriveConfig\GitConfigManager.cs" />
     <Compile Include="GitDriveConfig\GitRepository.cs" />
     <Compile Include="GitDriveConfig\IGitConfigManager.cs" />
+    <Compile Include="GitHelper\Commit.cs" />
     <Compile Include="GitHelper\GitRepositoryManager.cs" />
     <Compile Include="GitRepositoryProvider\GitDriveInfo.cs" />
     <Compile Include="GitRepositoryProvider\GitRepositoryProvider.cs" />
