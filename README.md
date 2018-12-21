@@ -7,7 +7,7 @@ A git provider for Powershell that helps you to manage and query git repositorie
 Get it throught Nuget:
 
 ```powershell
-Install-Package Pit
+Install-Package Pit -ProviderName Nuget
 
 ```
 
